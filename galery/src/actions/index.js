@@ -1,4 +1,4 @@
-hjsjskd
+
 const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
 		const identityID = "~89nsP6etTwi"
 		const galeryID = "~89nsP6etTwi"

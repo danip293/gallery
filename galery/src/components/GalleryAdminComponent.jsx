@@ -28,7 +28,7 @@ class GalleryAdmin extends Component {
         const datos = images.data.map((img ) => {
             return  <ListItemComponent key = {img.id} obj = {img} />
             })
-        console.log(datos)
+  
         return datos
 
         }

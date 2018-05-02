@@ -2,8 +2,8 @@ import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 /////components
 import App from './App'
-import GalleryAdmin from './components/galleryAdminComponent';
-import Gallery from './components/galleryComponent'
+import GalleryAdmin from './components/GalleryAdminComponent';
+import Gallery from './components/GalleryComponent'
 import {Page404} from  './components/Page404';
 
 
