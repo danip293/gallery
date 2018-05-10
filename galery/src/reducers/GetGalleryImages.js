@@ -1,7 +1,9 @@
-import { FETCHING_DATA ,FETCHING_DATA_SECCESS, FETCHING_DATA_FAILURE} from '../constants'
+import { FETCHING_DATA ,FETCHING_DATA_SECCESS, FETCHING_DATA_FAILURE, 
+	ADD_IMAGE, DELETED_IMAGE} from '../actions/'
 
 const initialState = {
 	data : [],
+	diccionary:{},
 	nextPage:"",
 	previewPage:"",
 	count: 0,
@@ -11,6 +13,20 @@ const initialState = {
 }
 const uploadImages = (state = initialState, action) => {
 switch (action.type){
+	case ADD_IMAGE:
+		return{
+			...state,
+			data : [],
+			isFetching : true,
+			
+		}
+	case DELETED_IMAGE:
+		return{
+			...state,
+			data : state.data.filter(dato => dato.id !==  action.payload ),
+			
+			
+		}	
 	case FETCHING_DATA:
 		return{
 			...state,

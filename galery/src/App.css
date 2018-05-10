@@ -26,7 +26,107 @@
 
 
 }
-.preview{
+
+/*imagecomponent*/
+.ImageComponent{
+  position:relative;
+  display: inline-block;
+  width: 200px;
+  height:150px;
+ 
+}
+
+
+.ImageComponent img{
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+
+
+}
+.ImageComponent a{
+  text-decoration: none;
+}
+
+
+.ImageComponent-selected{
+  position: absolute;
+  
+  top:0px;
+  width: 200px;
+  height:150px;
+  background-color: rgba(0,0,0,0.5);
+  animation-duration: 0.3s;
+  animation-name: slidein;
+}
+.ImageComponent-selected img{
+  position: absolute;
+  top:35%;
+  left:38%;
+  width: 23%;
+  height:30%;
+  margin :auto;
+  display: block;
+
+}
+
+  .ImageComponent-trash{
+    position: absolute;
+    top:0px;
+    right: 0px;
+    width: 40px;
+    height:30px;
+   /* background-color: rgba(232,4,4,0.7);
+    border-radius: 3px;*/
+  /*  animation-duration: 0.5s;
+    animation-name: fadein;*/
+
+    
+
+  }
+  #trash-button
+  {
+    visibility: hidden;
+  }
+
+  .ImageComponent:hover #trash-button {
+   visibility: visible;
+   
+    
+  }
+  .ImageComponent-trash span{
+  position: absolute;
+  top:5%;
+  right: 5%;
+  width: 90%;
+  height:90%;
+  margin :auto;
+  color:red;
+  
+  
+
+}
+
+
+ 
+  
+
+
+/*--------------*/
+
+
+
+
+
+
+.dropzone-content{
+  width: 500px;
+
+}
+
+/*ImagePreviewComponent*/
+
+.imagePreview{
   position: relative;
   display: inline-block;
   width: 30%;
@@ -34,35 +134,64 @@
  
   
 }
-.preview img{
+.imagePreview img{
   display: block;
   width: 100%;
   height:100%; 
   border-radius: 5px;
 }
 
-.uploading{
+
+.imagePreview-uploading{
   padding: 25% 25%;
   text-align: center;
-  top:0px;
   position: absolute;
+  top:0px;
   width: 100%;
   height:100%;
- 
-  background-color:rgba(255,255,255,0.5);
-}
-
-.dropzone-content{
-  width: 500px;
+  background-color:rgba(255,255,255,0.3);
 
 }
 
-.uploadImg {
-  width: 30%;
-  height: 30%;
-  border-radius: 5px;
+.imagePreview-succes {
+  text-align: center;
+  position: absolute;
+  top:0px;
+  width: 100%;
+  height:100%;
+  animation-duration: 0.9s;
+  animation-name: fadein;
+  /*background-color:rgba(168,249,130,0.0);*/
+}
+
+.imagePreview-succes img{
+  position: absolute;
+  top:35%;
+  left:35%;
+  height: 35%;
+  width:30%;
+}
+
+.imagePreview-error{
+  text-align: center;
+  position: absolute;
+  top:0px;
+  width: 100%;
+  height:100%;
+  background-color:rgba(168,0,0,0.4);
 
 }
+
+.imagePreview-error h1{
+  position: absolute;
+  top:32%;
+  left:35%;
+  height: 35%;
+  width:30%;
+
+}
+
+/*-----------------*/
 
 .Menu li {
   display: inline-block;
@@ -100,4 +229,33 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 2%;
+    margin-top: 2%;
+    width: 95%;
+    height:95%;
+    opacity: 0;
+  }
+
+  to {
+    margin-left: 0%;
+    margin-top: 0%;
+    width: 100%;
+    height: 100%;
+    opacity: 0.9;
+  }
+}
+
+@keyframes fadein {
+  from {
+
+    opacity: 0
+  }
+  to{
+    opacity: 1
+  }
+
 }

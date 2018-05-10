@@ -1,119 +1,65 @@
 import React , {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchData,uploadImage} from '../actions';
-import {ListItemComponent} from './listItemComponent';
-import Dropzone from 'react-dropzone';
-import { ClipLoader } from 'react-spinners';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import {fetchData,deleteImage} from '../actions';
+
+import { PaginationComponent} from './PaginationComponent'
+import ReactPaginate from 'react-paginate';
+import {ImageComponent} from './ImageComponent'
+import {GalleryDropzoneComponent} from './GalleryDropzoneComponent'
+
 
 
 
 class GalleryAdmin extends Component {
-    constructor() {
+  constructor(){
     super()
+    this.state={
+      selected: {},
 
-         this.state = {
-              files:  []
-              
-           
-            }
-        }
- 
+    }
+    this.selectImage = this.selectImage.bind(this)
+    this.deselectImage = this.deselectImage.bind(this)
+    this.deleteImg = this.deleteImg.bind(this)
+  }
+    
     componentDidMount(){
        this.props.fetchData()
+    }
+
+    selectImage(img){
+      let selected = this.state.selected
+      selected[img.id] = img
+      this.setState({selected:selected})
+    }
+
+    deselectImage(id){
+      let selected = this.state.selected
+      delete selected[id]
+      this.setState({selected:selected})
+    }
+    deleteImg(id){
+      console.log('delete')
+      this.props.delete(id)
+      
     }
 
     getGallery(){
         const {images} = this.props
         const datos = images.data.map((img ) => {
-            return  <ListItemComponent key = {img.id} obj = {img} />
+            return  <ImageComponent key = {img.id} img = {img} onselected={this.selectImage}
+             ondeselect={this.deselectImage} ondelete={this.deleteImg}/>
             })
-  
         return datos
-
-        }
-
-
-     pagination(){
-        const {count} = this.props.images
-
-
-        return(
-             <Pagination size="md">
-                <PaginationItem>
-                  <PaginationLink previous href="#" />
-                </PaginationItem>
-
-                <PaginationItem>
-                  <PaginationLink href="#">
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-
-                <PaginationItem>
-                  <PaginationLink href="#">
-                    2
-                  </PaginationLink>
-                </PaginationItem>
-
-                <PaginationItem>
-                  <PaginationLink href="#">
-                    3
-                  </PaginationLink>
-                </PaginationItem>
-                
-                <PaginationItem>
-                  <PaginationLink next href="#" />
-                </PaginationItem>
-              </Pagination>
-            )
-     }   
-        
-    
-    renderimg(){
-        const array = this.state.files
-        const {isUploading} = this.props.uploads
-        return array.map((img , key) =>{
-                return (
-                        <div className= "preview" >
-                          <img  key={img.preview} src={img.preview} alt = ""/> 
-                          {isUploading && 
-                            <div className="uploading">
-                                <ClipLoader color={'#123abc'} loading={isUploading} />
-                            </div> 
-                            }
-                        </div>          
-                 )
-            })
     }
 
 
-    onDrop(files) {
     
-        const childrens = files.map(file => {
-           const reader = new FileReader();
-           const FileName = file.name
-           reader.readAsDataURL(file);
-           reader.onload = (readImage) =>{
-            const data = {
-                image_base_64: readImage.srcElement.result,
-                name : FileName,
-            }
 
-            this.props.uploadImage(data)
-           }
+ 
 
-        });
-
-        this.setState({
-            files : files
-        })
-    }
-
-    
-          
     
     render (){
+     console.log(this.state.selected)
     return(
     <div >
       <h2>Mis imagenes </h2>
@@ -124,37 +70,42 @@ class GalleryAdmin extends Component {
         this.getGallery()
         : null
         }
-        
-        {this.pagination()}
+        <hr/>
 
-            <div className="dropzone-content">
-                <div >
-              <Dropzone className="filepicker dropzone dz-clickable dz-started" onDrop={this.onDrop.bind(this)}>
-                <p>Try dropping some files here, or click to select files to upload.</p>
-                  {this.renderimg()}
-              </Dropzone>
-              </div>
-            </div>
+           <ReactPaginate previousLabel={"Anterior"}
+                       nextLabel={"Siguiente"}
+                       breakLabel={<a href="">...</a>}
+                       breakClassName={"break-me"}
+                       pageCount={this.props.images.count/20}
+                       marginPagesDisplayed={2}
+                       pageRangeDisplayed={10}
+                       onPageChange={this.handlePageClick}
+                       containerClassName={"pagination"}
+                       subContainerClassName={"pages pagination"}
+                       activeClassName={"active"} />
 
+            
 
-
- 
+          
+                <GalleryDropzoneComponent />
+          
     </div>
+
     )
     
-    }
+  }
 }
     const mapStateToProps = state =>{             ///recive un state y devuelve un objeto
         return {
-        images:  state.getImages, 
-        uploads: state.uploadImages
+        images:  state.getImages
+        
       
         }
     }
     const mapDispatchToProps = dispatch =>{
         return{
-        fetchData : () => dispatch(fetchData()),
-        uploadImage : (data) => dispatch(uploadImage(data))
+        fetchData : (Url) => dispatch(fetchData(Url)),
+        delete      : (id) => dispatch(deleteImage(id))
         }
     }
     export default connect(mapStateToProps, mapDispatchToProps)(GalleryAdmin)
