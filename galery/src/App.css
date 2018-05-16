@@ -33,6 +33,11 @@
   display: inline-block;
   width: 200px;
   height:150px;
+  border-radius: 10px;
+ /* z-index: 1;
+  -webkit-filter: blur(5px);  Safari 6.0 - 9.0 
+  filter: blur(5px);*/
+
  
 }
 
@@ -51,7 +56,6 @@
 
 .ImageComponent-selected{
   position: absolute;
-  
   top:0px;
   width: 200px;
   height:150px;
@@ -67,6 +71,7 @@
   height:30%;
   margin :auto;
   display: block;
+
 
 }
 

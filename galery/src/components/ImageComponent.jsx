@@ -33,7 +33,7 @@ class ImageComponent extends Component{
 	render(){
 	
 		return(
-			<div className="ImageComponent">
+			<div className="ImageComponent" style={{"backgroundColor" :this.props.img.avg_color}}>
 				<a id ="select-button" onClick={this.handleClickSelect}>
 				<img src={this.props.img.url} alt = "img"/>
 				</a>

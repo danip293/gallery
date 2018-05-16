@@ -1,9 +1,9 @@
 
-const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
+		const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
 		const identityID = "~89nsP6etTwi"
 		const galeryID = "~89nsP6etTwi"
-		const param  = "/?resizetofit.width=200&resizetofit.height=200&resizetofit.upscale=true&_format=jpeg"
-		const finalUrl = baseUrl+"/"+identityID + ":" + galeryID + "/" 
+		const query  = "/?resizetofit.width=200&resizetofit.height=200&resizetofit.upscale=true&_format=jpeg"
+		const finalUrl = baseUrl+identityID + ":" + galeryID  +"/"
 
 export const ADD_IMAGE = "ADD_IMAGE"
 export const DELETE_IMAGE = "DELETE_IMAGE"
@@ -11,11 +11,29 @@ export const DELETED_IMAGE = "DELETED_IMAGE"
 export const FETCHING_DATA = "FETCHING_DATA"
 export const FETCHING_DATA_SECCESS = "FETCHING_DATA_SECCESS"
 export const FETCHING_DATA_FAILURE = "FETCHING_DATA_FAILURE"
+export const SELECTED_PAGE = "SELECTED_PAGE"
 
-export const UPLOADING_IMAGE = "UPLOADING_IMAGE"
-export const UPLOAD_IMAGE_SECCESS = "UPLOAD_IMAGE_SECCESS"
-export const UPLOAD_IMAGE_ERROR = "UPLOAD_IMAGE_ERROR"
+// export const UPLOADING_IMAGE = "UPLOADING_IMAGE"
+// export const UPLOAD_IMAGE_SECCESS = "UPLOAD_IMAGE_SECCESS"
+// export const UPLOAD_IMAGE_ERROR = "UPLOAD_IMAGE_ERROR"
 
+export const selectedPage = (pageNumber) =>{
+		return{
+			type:SELECTED_PAGE,
+			payload:pageNumber
+		}
+}
+
+export const selectPage = (pageNumber) =>{
+	return (dispatch) =>{
+		dispatch(selectedPage(pageNumber))
+		let p = new URLSearchParams();
+   		p.append('page', pageNumber || 1);
+   		dispatch(fetchData(finalUrl + query + "&"+ p))
+
+
+	}
+}
 
 export const addImage = (img) =>{
 	return {
@@ -51,8 +69,9 @@ export const getDataFailure = () =>{
 }
 
 
-export const fetchData = (Url = finalUrl ) =>{
-	Url= Url+param
+export const fetchData = (Url = finalUrl + query) =>{
+	
+	// console.log(Url)
 	return (dispatch) => {
 		
 	

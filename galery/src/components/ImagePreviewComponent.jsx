@@ -24,7 +24,6 @@ class ImagePreviewComponent extends Component{
                 name : FileName,
             }
               
-
 	    	const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
 			const identityID = "~89nsP6etTwi"
 			const galeryID = "~89nsP6etTwi"
@@ -52,14 +51,15 @@ class ImagePreviewComponent extends Component{
 		        }
 		      })
 		      .then(data => {
-		      	this.props.onAddImg(data)
 		      	this.setState({ success: true, isLoading: false })
+		      	this.props.onAddImg(data)
 		      	})
-		      .catch(error => this.setState({ error:true, isLoading: false }));
-           
-        }
- 		
+		      .catch(error =>{
+		      	console.log(error)
 
+		      	this.setState({ error:true, isLoading: false });
+		      })
+        }
   	}
 
 	render(){

@@ -6,23 +6,27 @@ class GalleryDropzoneComponent extends Component{
 	constructor() {
     super()
          this.state = {
-              files:  []
-              
+              files:  [],
+              uploadComplete: [] 
             }
+            this.addImage = this.addImage.bind(this)
         }
 
     
     addImage(img){
-      console.log(img)
-
+      const Completed = this.state.uploadComplete
+      Completed.push(img)
+      this.setState({
+        uploadComplete: Completed
+      })
     }    
 
     renderPreview(){
         const array = this.state.files
         return array.map((img , key) =>{
-                return (
+              return (
                     <ImagePreviewComponent key={key+"preview"} img = {img} onAddImg={this.addImage}/>    
-                 )
+              )
         })
     }
     onDrop(files) {
@@ -41,15 +45,16 @@ class GalleryDropzoneComponent extends Component{
     	return(
     	  <div className="dropzone-content">
                 <div >
-              <Dropzone className="filepicker dropzone dz-clickable dz-started" onDrop={this.onDrop.bind(this)}>
+              <Dropzone 
+                  className="filepicker dropzone dz-clickable dz-started" 
+                  accept="image/jpeg, image/png"
+                  onDropAccepted={this.onDrop.bind(this)}>
                 <p>trata de cargar los archivos que deseas subir aqui</p>
-                  {this.renderPreview()}
+                {this.renderPreview()}
               </Dropzone>
               </div>
             </div>
         )
     }
-
-
 }
 export {GalleryDropzoneComponent}

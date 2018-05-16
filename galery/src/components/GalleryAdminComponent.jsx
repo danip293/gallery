@@ -1,9 +1,8 @@
 import React , {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchData,deleteImage} from '../actions';
-
-import { PaginationComponent} from './PaginationComponent'
-import ReactPaginate from 'react-paginate';
+import {fetchData,deleteImage,selectPage} from '../actions';
+import {PaginationComponent} from './PaginationComponent'
+// import ReactPaginate from 'react-paginate';
 import {ImageComponent} from './ImageComponent'
 import {GalleryDropzoneComponent} from './GalleryDropzoneComponent'
 
@@ -53,11 +52,7 @@ class GalleryAdmin extends Component {
     }
 
 
-    
-
  
-
-    
     render (){
      console.log(this.state.selected)
     return(
@@ -72,21 +67,14 @@ class GalleryAdmin extends Component {
         }
         <hr/>
 
-           <ReactPaginate previousLabel={"Anterior"}
-                       nextLabel={"Siguiente"}
-                       breakLabel={<a href="">...</a>}
-                       breakClassName={"break-me"}
-                       pageCount={this.props.images.count/20}
-                       marginPagesDisplayed={2}
-                       pageRangeDisplayed={10}
-                       onPageChange={this.handlePageClick}
-                       containerClassName={"pagination"}
-                       subContainerClassName={"pages pagination"}
-                       activeClassName={"active"} />
-
-            
-
-          
+                <PaginationComponent 
+                next = {this.props.images.nextPage} 
+                fecth={this.props.fetchData} 
+                count ={this.props.images.count} 
+                onSelectPage = {this.props.selectPage} 
+                preview = {this.props.images.previewPage}
+                active = {this.props.images.CurrentPage} 
+                />
                 <GalleryDropzoneComponent />
           
     </div>
@@ -105,7 +93,8 @@ class GalleryAdmin extends Component {
     const mapDispatchToProps = dispatch =>{
         return{
         fetchData : (Url) => dispatch(fetchData(Url)),
-        delete      : (id) => dispatch(deleteImage(id))
+        delete      : (id) => dispatch(deleteImage(id)),
+        selectPage : (page) => dispatch(selectPage(page))
         }
     }
     export default connect(mapStateToProps, mapDispatchToProps)(GalleryAdmin)
