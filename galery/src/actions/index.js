@@ -1,7 +1,7 @@
-
+		const token = "sAIOwXigJ4BITByLVIAwpIZSjwuUfh3t~1fOpK6~FTNUtEKNEV_FqNjWGTILye-fx2E"
 		const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
-		const identityID = "~89nsP6etTwi"
-		const galeryID = "~89nsP6etTwi"
+		const identityID = "~FgT5c4D56wq"
+		const galeryID = "~FgT5c4D56wq"
 		const query  = "/?resizetofit.width=200&resizetofit.height=200&resizetofit.upscale=true&_format=jpeg"
 		const finalUrl = baseUrl+identityID + ":" + galeryID  +"/"
 
@@ -13,9 +13,18 @@ export const FETCHING_DATA_SECCESS = "FETCHING_DATA_SECCESS"
 export const FETCHING_DATA_FAILURE = "FETCHING_DATA_FAILURE"
 export const SELECTED_PAGE = "SELECTED_PAGE"
 
-// export const UPLOADING_IMAGE = "UPLOADING_IMAGE"
-// export const UPLOAD_IMAGE_SECCESS = "UPLOAD_IMAGE_SECCESS"
-// export const UPLOAD_IMAGE_ERROR = "UPLOAD_IMAGE_ERROR"
+
+
+const fetchDataPerPage = (pageNumber )=>{
+	return (dispatch) =>{
+		
+			console.log("buscar pagina " + pageNumber)
+			let p = new URLSearchParams();
+	   		p.append('page', pageNumber || 1);
+	   		dispatch(fetchData(finalUrl + query + "&"+ p))	
+	}
+
+}
 
 export const selectedPage = (pageNumber) =>{
 		return{
@@ -25,20 +34,26 @@ export const selectedPage = (pageNumber) =>{
 }
 
 export const selectPage = (pageNumber) =>{
-	return (dispatch) =>{
-		dispatch(selectedPage(pageNumber))
-		let p = new URLSearchParams();
-   		p.append('page', pageNumber || 1);
-   		dispatch(fetchData(finalUrl + query + "&"+ p))
+	return (dispatch , getState) =>{
+		let state = getState()
+				
+		if (state.getImages.requestedPages["page"+ pageNumber] === undefined) {
 
-
+	  		dispatch(fetchDataPerPage(pageNumber))
+			dispatch(selectedPage(pageNumber))		
+		}
+		else{
+			console.log("ya la tengo")
+			dispatch(selectedPage(pageNumber))
+			
+		}
 	}
 }
 
 export const addImage = (img) =>{
 	return {
 		type : ADD_IMAGE,
-		payloaad : img
+		payload : img
 	}
 }
 
@@ -71,16 +86,13 @@ export const getDataFailure = () =>{
 
 export const fetchData = (Url = finalUrl + query) =>{
 	
-	// console.log(Url)
-	return (dispatch) => {
-		
-	
+	return (dispatch) => {	
 		let options = {
 		    method: 'GET',
 		    //mode: 'cors',
 		    //body: JSON.stringify(valuesForm),
 		    headers: {
-		    	"Authorization" : "Bearer sAdFFLwSeLR9JOoLYChPtm6BhRb3kDzD~1fL9qG~at2hJH-nV0lO0KwLn3hP_DMii_I",
+		    	"Authorization" : "Bearer "+ token,
       			"Content-type": "application/json; charset=UTF-8"
     		}
 		}
@@ -101,6 +113,7 @@ export const fetchData = (Url = finalUrl + query) =>{
 		        dispatch(getDataSuccess(j))
 		    })
 		    .catch( (err) =>{
+		    	alert(err)
 		        //console.log('ERROR:', err.message);
 		        dispatch(getDataFailure())
 		    });
@@ -111,20 +124,26 @@ export const fetchData = (Url = finalUrl + query) =>{
 
 
 export const deleteImage = (id) =>{
-	return (dispatch) =>{
+	return (dispatch, getState) =>{
+		let state = getState()
+		let pageNumber = state.getImages.currentPage
+		const {count} = state.getImages
+		let lastPage = Math.ceil(count / 20)
+		
+
 		let options = {
 		    method: 'DELETE',
 		    //mode: 'cors',
 		    //body: JSON.stringify(data),
 		    headers: {
-      			"Authorization" : "Bearer sAdFFLwSeLR9JOoLYChPtm6BhRb3kDzD~1fL9qG~at2hJH-nV0lO0KwLn3hP_DMii_I",
+      			"Authorization" : "Bearer "+ token,
       			"Content-type": "application/json; charset=UTF-8"
     		}
 		}
 		let Url= finalUrl+id
 		let req = new Request(Url, options);
 
-		//dispatch(uploadingImage())
+		
 		fetch(req)
 		    .then((response)=>{
 		        if(response.ok){
@@ -134,11 +153,22 @@ export const deleteImage = (id) =>{
 		        }
 		    })
 		    .then( (j) =>{
-		        console.log(j);
-		        //dispatch(uploadSuccess(j))
+		    	console.log(j);
+		    	
+		    	if(state.getImages.requestedPages["page"+(pageNumber + 1)] === undefined && (pageNumber < lastPage)){   /// si voy a borrar una imagen y no tengo los datos de la pagina siguiente
+		    		dispatch((deletedImage(id)))
+		    		dispatch(fetchDataPerPage(pageNumber))
+
+		    	}else{
+
 		        dispatch((deletedImage(id)))
+		    		
+		    	}
+		        
+
 		    })
 		    .catch( (err) =>{
+		    	alert(err)
 		        console.log('ERROR:', err.message);
 		        //dispatch(uploadFailure())
 		    });
@@ -146,61 +176,3 @@ export const deleteImage = (id) =>{
 
 }
 
-
-// export const uploadingImage = () =>{
-// 	return {
-// 		type : UPLOADING_IMAGE
-// 	}
-// }
-
-// export const uploadSuccess = data =>{
-// 	return {
-// 		type : UPLOAD_IMAGE_SECCESS,
-// 		data 
-// 	}
-// }
-
-// export const uploadFailure = () =>{
-// 	return{
-// 		type : UPLOAD_IMAGE_ERROR
-// 	}
-// }
-
-// export const uploadImage = (data) =>{
-	
-// 	return (dispatch) =>{
-
-		
-
-// 		let options = {
-// 		    method: 'POST',
-// 		    //mode: 'cors',
-// 		    body: JSON.stringify(data),
-// 		    headers: {
-//       			"Authorization" : "Bearer sA7lLVe99fAjaLbcbUDIGNvkh8d7JjAj~1fFirQ~gqVYU_FPEH1Sv5J4LExwYuJLwEc",
-//       			"Content-type": "application/json; charset=UTF-8"
-//     		}
-// 		}
-
-// 		let req = new Request(finalUrl, options);
-
-// 		dispatch(uploadingImage())
-// 		fetch(req)
-// 		    .then((response)=>{
-// 		        if(response.ok){
-// 		            return response.json();   ///recivve los datos del json  y los retorna al siguiente .then 
-// 		        }else{
-// 		            throw new Error('Ha ocurrido un error !')
-// 		        }
-// 		    })
-// 		    .then( (j) =>{
-// 		        //console.log(j);
-// 		        dispatch(uploadSuccess(j))
-// 		        dispatch(fetchData())
-// 		    })
-// 		    .catch( (err) =>{
-// 		        //console.log('ERROR:', err.message);
-// 		        dispatch(uploadFailure())
-// 		    });
-// 	}
-// }

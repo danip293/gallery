@@ -7,13 +7,14 @@ const initialState = {
 	list:[],
 	nextPage:null,
 	previewPage: null,
-	CurrentPage: 1 ,
+	currentPage: 1 ,
 	count: 0,
 	isFetching : false,
-	error : false 
+	error : false, 
+	requestedPages:{},
+	data2 : []
 
 }
-
 
 
 const dictionary = (array,prevState)=>{
@@ -26,35 +27,35 @@ const dictionary = (array,prevState)=>{
 
 const list = (array,prevState)=>{
 	let list = prevState.list
-	let elements = array.map(element => {
+	let page = prevState.currentPage
+	page = ((page * 2 )-2)*10 
+	
+	let elements = array.map((element,key) => {
+		list[page + key] = element.id
 		return element.id
-
 	})
-	list.push(...elements)
+
 	return list
 
 }
-const list2 = (prevState)=>{
-	let list = []
-	let obj = prevState.diccionary
-		for (var i in obj){
-		list.push(i)
-		}
-	return list
-	}
-
-
-
-
 
 
 const uploadImages = (state = initialState, action) => {
 switch (action.type){
 	case ADD_IMAGE:
+
+		let newList= state.list
+		newList.unshift(action.payload.id)
+
+		let newDiccionary = state.diccionary
+		newDiccionary[action.payload.id] = action.payload
+
 		return{
 			...state,
-			data : [],
-			isFetching : true,
+			list: newList,
+			diccionary:newDiccionary,
+			count: state.count + 1,
+
 			
 		}
 	case DELETED_IMAGE:
@@ -62,12 +63,17 @@ switch (action.type){
 			...state,
 			data : state.data.filter(dato => dato.id !==  action.payload ),
 			count: state.count - 1,
+			list: state.list.filter(dato => dato !== action.payload)
 			
 		}	
 	case SELECTED_PAGE:
+		let pages = state.requestedPages
+		pages["page" + action.payload] = true
+		
 		return{
 			...state,
-			CurrentPage:action.payload 
+			requestedPages: pages ,
+			currentPage:action.payload 
 
 		}	
 	case FETCHING_DATA:
@@ -82,7 +88,7 @@ switch (action.type){
 			...state,
 			data : action.data.results,
 			diccionary:dictionary(action.data.results,state),
-			list:list2(state),
+			list:list(action.data.results,state),
 			nextPage: action.data.next,
 			previewPage: action.data.previous,
 			count: action.data.count,

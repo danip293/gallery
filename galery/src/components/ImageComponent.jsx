@@ -1,6 +1,6 @@
 import React , {Component} from 'react'
 import logo from '../ok-appproval-aceptacion.png'
-import cuBasura from '../cubo-de-basura.png'
+import PropTypes from 'prop-types';
 
 
 class ImageComponent extends Component{
@@ -12,6 +12,18 @@ class ImageComponent extends Component{
      this.handleClickSelect = this.handleClickSelect.bind(this); 
      this.handleClickTrash = this.handleClickTrash.bind(this);    
  }
+
+componentDidMount(){
+	this.setState({
+		is_selected : this.props.selected
+
+	})
+}
+componentWillReceiveProps(nextProps){
+    if  (this.props.selected !== nextProps.selected){
+        this.setState({ is_selected : nextProps.selected})
+    }
+}
 
  handleClickSelect(){
  	this.setState(prevState => {
@@ -26,12 +38,12 @@ class ImageComponent extends Component{
      	
  }
  handleClickTrash(id){
- 	alert(id)
+ 	
  	this.props.ondelete(id)
 
  }
 	render(){
-	
+		
 		return(
 			<div className="ImageComponent" style={{"backgroundColor" :this.props.img.avg_color}}>
 				<a id ="select-button" onClick={this.handleClickSelect}>
@@ -41,7 +53,7 @@ class ImageComponent extends Component{
 				{this.state.is_selected ? 
 					<a id ="select-button" onClick={this.handleClickSelect}>
 				 		<div className="ImageComponent-selected">
-	                	    <img src={logo}/>
+	                	    <img src={logo} alt=""/>
 	                	</div>
 	                </a>
 	                : 
@@ -61,9 +73,13 @@ class ImageComponent extends Component{
 	}
 }
 
+ImageComponent.propTypes = {
+  onselected: PropTypes.func.isRequired,
+  ondeselect: PropTypes.func.isRequired,
+  ondelete : PropTypes.func.isRequired,	
+  selected : PropTypes.bool.isRequired
 
-////propiedades por defecto
-// CustomButton.defaultProps = {
-//   color: 'blue'
-// }
+};
+
+
 export {ImageComponent}

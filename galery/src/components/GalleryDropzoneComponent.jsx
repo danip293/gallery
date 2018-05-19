@@ -3,7 +3,7 @@ import Dropzone from 'react-dropzone';
 import {ImagePreviewComponent} from './ImagePreviewComponent'
 
 class GalleryDropzoneComponent extends Component{
-	constructor() {
+	 constructor() {
     super()
          this.state = {
               files:  [],
@@ -14,6 +14,7 @@ class GalleryDropzoneComponent extends Component{
 
     
     addImage(img){
+      this.props.onAddImage(img)
       const Completed = this.state.uploadComplete
       Completed.push(img)
       this.setState({

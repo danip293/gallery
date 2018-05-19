@@ -25,8 +25,8 @@ class ImagePreviewComponent extends Component{
             }
               
 	    	const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
-			const identityID = "~89nsP6etTwi"
-			const galeryID = "~89nsP6etTwi"
+			const identityID = "~FgT5c4D56wq"
+			const galeryID = "~FgT5c4D56wq"
 			const finalUrl = baseUrl+"/"+identityID + ":" + galeryID + "/" 
 
 			let options = {
@@ -34,20 +34,18 @@ class ImagePreviewComponent extends Component{
 			    //mode: 'cors',
 			    body: JSON.stringify(data),
 			     headers: {
-			    	"Authorization" : "Bearer sAdFFLwSeLR9JOoLYChPtm6BhRb3kDzD~1fL9qG~at2hJH-nV0lO0KwLn3hP_DMii_I",
+			    	"Authorization" : "Bearer sAIOwXigJ4BITByLVIAwpIZSjwuUfh3t~1fOpK6~FTNUtEKNEV_FqNjWGTILye-fx2E",
 	      			"Content-type": "application/json; charset=UTF-8"
 	    		}
 			}
-
 			let req = new Request(finalUrl, options);
-
 
 		    fetch(req)
 		      .then(response => {
 		        if (response.ok) {
 		          return response.json();
 		        } else {
-		          throw new Error('Something went wrong ...');
+		          throw new Error('Ha ocurrido un error! ...');
 		        }
 		      })
 		      .then(data => {
@@ -55,6 +53,7 @@ class ImagePreviewComponent extends Component{
 		      	this.props.onAddImg(data)
 		      	})
 		      .catch(error =>{
+		      	alert(error)
 		      	console.log(error)
 
 		      	this.setState({ error:true, isLoading: false });
@@ -76,7 +75,7 @@ class ImagePreviewComponent extends Component{
                           }
                            {success && 
                            	<div className="imagePreview-succes">
-	                  			  <img src={logo}/>
+	                  			  <img src={logo} alt = ""/>
 	                		</div>
                           }
                            {error && 
