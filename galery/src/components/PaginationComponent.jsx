@@ -1,5 +1,6 @@
 import React , {Component} from 'react'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 
 class PaginationComponent extends Component{
@@ -59,7 +60,14 @@ class PaginationComponent extends Component{
               </Pagination>
 
 
-			)
+		)
 	}
+}
+PaginationComponent.propTypes = {
+	fecth : PropTypes.func.isRequired,
+	count : PropTypes.number.isRequired,
+	onSelectPage : PropTypes.func.isRequired,
+	active : PropTypes.number.isRequired	
+
 }
 export {PaginationComponent}

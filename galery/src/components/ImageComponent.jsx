@@ -11,6 +11,7 @@ class ImageComponent extends Component{
          }
      this.handleClickSelect = this.handleClickSelect.bind(this); 
      this.handleClickTrash = this.handleClickTrash.bind(this);    
+     this.handleClickCover = this.handleClickCover.bind(this);
  }
 
 componentDidMount(){
@@ -42,14 +43,24 @@ componentWillReceiveProps(nextProps){
  	this.props.ondelete(id)
 
  }
+
+ handleClickCover(id){
+ 	this.props.oncoverimage(id)
+
+ }
 	render(){
 		
 		return(
 			<div className="ImageComponent" style={{"backgroundColor" :this.props.img.avg_color}}>
 				<a id ="select-button" onClick={this.handleClickSelect}>
-				<img src={this.props.img.url} alt = "img"/>
+				{this.props.img.cover ?
+					<img src={this.props.img.url} alt = "img" style = {{ "border": "solid 5px","borderColor": " #FFC300"}}/>
+					:
+					<img src={this.props.img.url} alt = "img" />
+				}
 				</a>
 				
+
 				{this.state.is_selected ? 
 					<a id ="select-button" onClick={this.handleClickSelect}>
 				 		<div className="ImageComponent-selected">
@@ -57,13 +68,22 @@ componentWillReceiveProps(nextProps){
 	                	</div>
 	                </a>
 	                : 
-	                <a id= "trash-button" onClick={this.handleClickTrash.bind(this,this.props.img.id)}>
-	               		 <div className= "ImageComponent-trash">
-	                         	<h3>
-	                         		<span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
-	                         	</h3>
-	               		</div>
-	               </a>
+	                <div className = "HoverOptions">
+		                <a id= "trash-button" onClick={this.handleClickTrash.bind(this,this.props.img.id)}>
+		               		 <div className= "ImageComponent-trash">
+		                         	<h3>
+		                         		<span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
+		                         	</h3>
+		               		</div>
+		               </a>
+		               <a id= "cover-button" onClick={this.handleClickCover.bind(this,this.props.img.id)}>
+		               		 <div className= "ImageComponent-cover">
+		                         	<h3>
+		                         		<span className="glyphicon glyphicon-picture" aria-hidden="true"></span>
+		                         	</h3>
+		               		</div>
+		               </a>
+		            </div>   
 
 	            }	
 

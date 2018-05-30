@@ -12,19 +12,36 @@ export const FETCHING_DATA = "FETCHING_DATA"
 export const FETCHING_DATA_SECCESS = "FETCHING_DATA_SECCESS"
 export const FETCHING_DATA_FAILURE = "FETCHING_DATA_FAILURE"
 export const SELECTED_PAGE = "SELECTED_PAGE"
+export const PAGE_FETCHED = "PAGE_FETCHED"
+export const SELECT_IMG_COVER = "SELECT_IMG_COVER"
 
 
+const selectImgCover = (img) =>{
+	return {
+		type :SELECT_IMG_COVER,
+		payload : img
+	}
+
+}
 
 const fetchDataPerPage = (pageNumber )=>{
 	return (dispatch) =>{
 		
-			console.log("buscar pagina " + pageNumber)
+			// console.log("buscar pagina " + pageNumber)
 			let p = new URLSearchParams();
 	   		p.append('page', pageNumber || 1);
 	   		dispatch(fetchData(finalUrl + query + "&"+ p))	
+	   		dispatch(pageFetched(pageNumber))
 	}
 
 }
+const pageFetched = (pageNumber) =>{
+	return {
+		type : PAGE_FETCHED,
+		payload :pageNumber
+	}
+
+} 
 
 export const selectedPage = (pageNumber) =>{
 		return{
@@ -37,14 +54,13 @@ export const selectPage = (pageNumber) =>{
 	return (dispatch , getState) =>{
 		let state = getState()
 				
-		if (state.getImages.requestedPages["page"+ pageNumber] === undefined) {
+		if (state.getImages.requestedPages.get("page"+ pageNumber) === undefined) { /// cuando no se tiene una pagina selecccionada
 
 	  		dispatch(fetchDataPerPage(pageNumber))
 			dispatch(selectedPage(pageNumber))		
 		}
 		else{
-			console.log("ya la tengo")
-			dispatch(selectedPage(pageNumber))
+			dispatch(selectedPage(pageNumber)) //cuando ya se tiene la pagina seleccionada
 			
 		}
 	}
@@ -56,6 +72,42 @@ export const addImage = (img) =>{
 		payload : img
 	}
 }
+
+export const uploadImage = (data) => {
+	return(dispatch) =>{
+
+	let options = {
+		    method: 'POST',
+		    //mode: 'cors',
+		    body: JSON.stringify(data),
+		    headers: {
+		    	"Authorization" : "Bearer "+ token,
+      			"Content-type": "application/json; charset=UTF-8"
+    		}
+		}
+
+		let req = new Request(finalUrl, options);
+
+	    fetch(req)
+	      .then(response => {
+	        if (response.ok) {
+	          return response.json();
+	        } else {
+	          throw new Error('Ha ocurrido un error! ...');
+	        }
+	      })
+	      .then(data => {
+	      		dispatch(addImage(data))
+	      	})
+	      .catch(error =>{
+		      	alert(error)
+		      	console.log(error)
+	      })
+
+
+	}
+
+} 
 
 export const deletedImage = (id) =>{
 	return {
@@ -121,8 +173,6 @@ export const fetchData = (Url = finalUrl + query) =>{
 	}
 }
 
-
-
 export const deleteImage = (id) =>{
 	return (dispatch, getState) =>{
 		let state = getState()
@@ -130,7 +180,6 @@ export const deleteImage = (id) =>{
 		const {count} = state.getImages
 		let lastPage = Math.ceil(count / 20)
 		
-
 		let options = {
 		    method: 'DELETE',
 		    //mode: 'cors',
@@ -147,7 +196,7 @@ export const deleteImage = (id) =>{
 		fetch(req)
 		    .then((response)=>{
 		        if(response.ok){
-		            return response.status;   ///recivve los datos del json  y los retorna al siguiente .then 
+		            return response.status;   ///estatus 200 si se ha borrado correctamente
 		        }else{
 		            throw new Error('Ha ocurrido un error !')
 		        }
@@ -155,17 +204,51 @@ export const deleteImage = (id) =>{
 		    .then( (j) =>{
 		    	console.log(j);
 		    	
-		    	if(state.getImages.requestedPages["page"+(pageNumber + 1)] === undefined && (pageNumber < lastPage)){   /// si voy a borrar una imagen y no tengo los datos de la pagina siguiente
+		    	if(state.getImages.requestedPages.get("page"+(pageNumber + 1)) === undefined && (pageNumber < lastPage)){   /// si voy a borrar una imagen y no tengo los datos de la pagina siguiente
 		    		dispatch((deletedImage(id)))
 		    		dispatch(fetchDataPerPage(pageNumber))
-
 		    	}else{
-
 		        dispatch((deletedImage(id)))
-		    		
 		    	}
 		        
+		    })
+		    .catch( (err) =>{
+		    	alert(err)
+		        console.log('ERROR:', err.message);
+		        //dispatch(uploadFailure())
+		    });
+	}
 
+}
+
+export const coverImage = (id) =>{
+	return (dispatch) =>{
+		
+		let options = {
+		    method: 'PATCH',
+		    //mode: 'cors',
+		    body: JSON.stringify( {"cover": true} ),
+		    headers: {
+      			"Authorization" : "Bearer "+ token,
+      			"Content-type": "application/json; charset=UTF-8"
+    		}
+		}
+		let Url= finalUrl+id
+		let req = new Request(Url, options);
+
+		
+		fetch(req)
+		    .then((response)=>{
+		        if(response.ok){
+		            return response.json();   
+		        }else{
+		            throw new Error('Ha ocurrido un error !')
+		        }
+		    })
+		    .then( (j) =>{
+		    	
+		    	dispatch(selectImgCover(id));
+		    	        
 		    })
 		    .catch( (err) =>{
 		    	alert(err)

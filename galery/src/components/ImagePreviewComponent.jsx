@@ -23,48 +23,49 @@ class ImagePreviewComponent extends Component{
                 image_base_64: reader.result,
                 name : FileName,
             }
+
+            this.props.onAddImg(data)
+
               
-	    	const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
-			const identityID = "~FgT5c4D56wq"
-			const galeryID = "~FgT5c4D56wq"
-			const finalUrl = baseUrl+"/"+identityID + ":" + galeryID + "/" 
+	  //   	const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
+			// const identityID = "~FgT5c4D56wq"
+			// const galeryID = "~FgT5c4D56wq"
+			// const finalUrl = baseUrl+"/"+identityID + ":" + galeryID + "/" 
 
-			let options = {
-			    method: 'POST',
-			    //mode: 'cors',
-			    body: JSON.stringify(data),
-			     headers: {
-			    	"Authorization" : "Bearer sAIOwXigJ4BITByLVIAwpIZSjwuUfh3t~1fOpK6~FTNUtEKNEV_FqNjWGTILye-fx2E",
-	      			"Content-type": "application/json; charset=UTF-8"
-	    		}
-			}
-			let req = new Request(finalUrl, options);
+			// let options = {
+			//     method: 'POST',
+			//     //mode: 'cors',
+			//     body: JSON.stringify(data),
+			//      headers: {
+			//     	"Authorization" : "Bearer sAIOwXigJ4BITByLVIAwpIZSjwuUfh3t~1fOpK6~FTNUtEKNEV_FqNjWGTILye-fx2E",
+	  //     			"Content-type": "application/json; charset=UTF-8"
+	  //   		}
+			// }
+			// let req = new Request(finalUrl, options);
 
-		    fetch(req)
-		      .then(response => {
-		        if (response.ok) {
-		          return response.json();
-		        } else {
-		          throw new Error('Ha ocurrido un error! ...');
-		        }
-		      })
-		      .then(data => {
-		      	this.setState({ success: true, isLoading: false })
-		      	this.props.onAddImg(data)
-		      	})
-		      .catch(error =>{
-		      	alert(error)
-		      	console.log(error)
+		 //    fetch(req)
+		 //      .then(response => {
+		 //        if (response.ok) {
+		 //          return response.json();
+		 //        } else {
+		 //          throw new Error('Ha ocurrido un error! ...');
+		 //        }
+		 //      })
+		 //      .then(data => {
+		 //      	this.setState({ success: true, isLoading: false })
+		 //      	this.props.onAddImg(data)
+		 //      	})
+		 //      .catch(error =>{
+		 //      	alert(error)
+		 //      	console.log(error)
 
-		      	this.setState({ error:true, isLoading: false });
-		      })
+		 //      	this.setState({ error:true, isLoading: false });
+		 //      })
         }
   	}
 
 	render(){
-		// console.log(this.state)
 		const {isLoading,success,error} = this.state
-
 		return(
 			<div className= "imagePreview" >
                           <img  key={this.props.img.preview} src={this.props.img.preview} alt = ""/> 

@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import {combineReducers} from 'redux'; ///redux o redux immutable
 
 
 import getImages from './GetGalleryImages';

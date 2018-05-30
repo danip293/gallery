@@ -1,6 +1,7 @@
 import React , {Component} from 'react'
 import Dropzone from 'react-dropzone';
 import {ImagePreviewComponent} from './ImagePreviewComponent'
+import PropTypes from 'prop-types';
 
 class GalleryDropzoneComponent extends Component{
 	 constructor() {
@@ -57,5 +58,10 @@ class GalleryDropzoneComponent extends Component{
             </div>
         )
     }
+}
+GalleryDropzoneComponent.propTypes = {
+  onAddImage: PropTypes.func.isRequired
+
+
 }
 export {GalleryDropzoneComponent}
