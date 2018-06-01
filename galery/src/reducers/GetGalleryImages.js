@@ -10,6 +10,7 @@ const initialState = {
 	isFetching : false,
 	error : false, 
 	requestedPages:Map(),
+	pageSize : 5
 	
 
 
@@ -25,7 +26,7 @@ const dictionary = (array,prevState)=>{
 
 const list = (array,prevState)=>{
 	let list = prevState.list
-	let page = ((prevState.currentPage * 2 )-2)*10 
+	let page = ((prevState.currentPage-1) * prevState.pageSize) 
 	
 	for (var i = 0; i < array.length; i++) {
 		list = list.set(page + i,array[i].id)

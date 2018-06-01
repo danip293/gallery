@@ -2,7 +2,7 @@
 		const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
 		const identityID = "~FgT5c4D56wq"
 		const galeryID = "~FgT5c4D56wq"
-		const query  = "/?resizetofit.width=200&resizetofit.height=200&resizetofit.upscale=true&_format=jpeg"
+		const query  = "/?resizetofit.width=200&resizetofit.height=200&resizetofit.upscale=true&_format=jpeg&page_size=5"
 		const finalUrl = baseUrl+identityID + ":" + galeryID  +"/"
 
 export const ADD_IMAGE = "ADD_IMAGE"
@@ -26,8 +26,6 @@ const selectImgCover = (img) =>{
 
 const fetchDataPerPage = (pageNumber )=>{
 	return (dispatch) =>{
-		
-			// console.log("buscar pagina " + pageNumber)
 			let p = new URLSearchParams();
 	   		p.append('page', pageNumber || 1);
 	   		dispatch(fetchData(finalUrl + query + "&"+ p))	
@@ -53,6 +51,9 @@ export const selectedPage = (pageNumber) =>{
 export const selectPage = (pageNumber) =>{
 	return (dispatch , getState) =>{
 		let state = getState()
+		// let page_size = 5
+		// page_size = page_size % 20 
+
 				
 		if (state.getImages.requestedPages.get("page"+ pageNumber) === undefined) { /// cuando no se tiene una pagina selecccionada
 
@@ -73,7 +74,7 @@ export const addImage = (img) =>{
 	}
 }
 
-export const uploadImage = (data) => {
+export const uploadImage = (data , callback) => {
 	return(dispatch) =>{
 
 	let options = {
@@ -91,6 +92,10 @@ export const uploadImage = (data) => {
 	    fetch(req)
 	      .then(response => {
 	        if (response.ok) {
+
+	        	if(callback){
+	        		callback()	
+	        	}
 	          return response.json();
 	        } else {
 	          throw new Error('Ha ocurrido un error! ...');
@@ -178,7 +183,7 @@ export const deleteImage = (id) =>{
 		let state = getState()
 		let pageNumber = state.getImages.currentPage
 		const {count} = state.getImages
-		let lastPage = Math.ceil(count / 20)
+		let lastPage = Math.ceil(count / state.getImages.pageSize)
 		
 		let options = {
 		    method: 'DELETE',
@@ -203,8 +208,7 @@ export const deleteImage = (id) =>{
 		    })
 		    .then( (j) =>{
 		    	console.log(j);
-		    	
-		    	if(state.getImages.requestedPages.get("page"+(pageNumber + 1)) === undefined && (pageNumber < lastPage)){   /// si voy a borrar una imagen y no tengo los datos de la pagina siguiente
+		    	if(state.getImages.requestedPages.get("page"+(pageNumber + 1)) === undefined && (pageNumber !== lastPage)){   /// si voy a borrar una imagen y no tengo los datos de la pagina siguiente
 		    		dispatch((deletedImage(id)))
 		    		dispatch(fetchDataPerPage(pageNumber))
 		    	}else{

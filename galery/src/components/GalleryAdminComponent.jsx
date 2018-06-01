@@ -1,6 +1,6 @@
 import React , {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchData,deleteImage,selectPage,addImage,coverImage,uploadImage} from '../actions/gallery';
+import {fetchData,deleteImage,selectPage,coverImage,uploadImage} from '../actions/gallery';
 import {PaginationComponent} from './PaginationComponent'
 
 
@@ -8,17 +8,15 @@ import {GalleryDropzoneComponent} from './GalleryDropzoneComponent'
 import {ImageContainerComponent} from './ImageContainerComponent.jsx'
 
 
-
-
-class GalleryAdmin extends Component {
+class GalleryAdminComponent extends Component {
   constructor(){
     super()
 
     this.addImage = this.addImage.bind(this)
   }
 
-  addImage(img){
-      this.props.addImg(img)  
+  addImage(img, callback){
+      this.props.addImg(img, callback)  
   }
     render (){
      
@@ -36,6 +34,7 @@ class GalleryAdmin extends Component {
                 delete = {this.props.delete}
                 cover = {this.props.coverImage} 
                 multipleChoice = {false}
+                pageSize = {this.props.images.pageSize}
             />
 
           <hr/>
@@ -44,17 +43,16 @@ class GalleryAdmin extends Component {
                     fecth={this.props.fetchData} 
                     count ={this.props.images.count} 
                     onSelectPage = {this.props.selectPage}
-                    active = {this.props.images.currentPage} 
+                    active = {this.props.images.currentPage}
+                    pageSize = {this.props.images.pageSize} 
                   />
 
                   <GalleryDropzoneComponent 
                     onAddImage = {this.addImage}
                   />
             
-      </div>
-      
-    )
-    
+      </div>    
+    )  
   }
 }
     const mapStateToProps = state =>{             
@@ -68,10 +66,10 @@ class GalleryAdmin extends Component {
           fetchData  : (Url) => dispatch(fetchData(Url)),
           delete     : (id) => dispatch(deleteImage(id)),
           selectPage : (page) => dispatch(selectPage(page)),
-          addImg     : (img) => dispatch(uploadImage(img)),
+          addImg     : (img, callback) => dispatch(uploadImage(img,callback)),
           coverImage : (id) => dispatch(coverImage(id))
         }
     }
-    export default connect(mapStateToProps, mapDispatchToProps)(GalleryAdmin)
+    export default connect(mapStateToProps, mapDispatchToProps)(GalleryAdminComponent)
 
 

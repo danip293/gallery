@@ -20,8 +20,10 @@ class PaginationComponent extends Component{
 
 	createPages(){
 	
-		var {count} = this.props
-		count = count / 20
+		let {count} = this.props
+		const {pageSize} = this.props
+
+		count = count / pageSize
 		count = Math.ceil(count)
 		
 		const leng = []
@@ -41,9 +43,9 @@ class PaginationComponent extends Component{
 	}
 
 	render(){
-		const {count} = this.props
-		let lastPage = Math.ceil(count / 20)
-		const {active} = this.props
+		const {count, active , pageSize} = this.props
+		let lastPage = Math.ceil(count / pageSize)
+	
 		
 		return(
 

@@ -88,12 +88,7 @@
     right: 0px;
     width: 40px;
     height:30px;
-    
-   /* background-color: rgba(232,4,4,0.7);
-    border-radius: 3px;*/
-  /*  animation-duration: 0.5s;
-    animation-name: fadein;*/
-  
+    border-radius: 100%;
   }
 
     .ImageComponent-cover{
@@ -102,10 +97,8 @@
     left:  0px;
     width: 40px;
     height:30px;
+    border-radius: 100%;
     
-
- 
-  
   }
   
 
@@ -116,26 +109,31 @@
 
   .ImageComponent:hover #trash-button {
    visibility: visible;
-       
+    animation-duration: 0.5s;
+    animation-name: slidein;
   }
+
 
   .ImageComponent:hover #cover-button {
    visibility: visible;
+   animation-duration: 0.5s;
+   animation-name: slidein;
        
   }
 
   .ImageComponent-trash span{
   position: absolute;
-  top:5%;
+  top:20%;
   right: 5%;
   width: 90%;
   height:90%;
   margin :auto;
   color:red;
+
   }
    .ImageComponent-cover span{
   position: absolute;
-  top:5%;
+  top:20%;
   left:  5%;
   width: 90%;
   height:90%;
@@ -214,8 +212,8 @@
   position: absolute;
   top:35%;
   left:35%;
-  height: 35%;
-  width:30%;
+  height: 35px;
+  width: 35px;
 }
 
 .imagePreview-error{
@@ -293,15 +291,4 @@
     height: 100%;
     opacity: 0.9;
   }
-}
-
-@keyframes fadein {
-  from {
-
-    opacity: 0
-  }
-  to{
-    opacity: 1
-  }
-
 }
