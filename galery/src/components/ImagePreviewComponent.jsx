@@ -27,8 +27,9 @@ class ImagePreviewComponent extends Component{
 								name : FileName,
 						}
 						const actionCallBack = () => this.setState({ success: true, isLoading: false });
+            const actionCallBackError = () => this.setState({error: true, isLoading:false})
 						
-						this.props.onAddImg(data , actionCallBack)
+						this.props.onAddImg(data , actionCallBack, actionCallBackError)
 				}
 		}
 

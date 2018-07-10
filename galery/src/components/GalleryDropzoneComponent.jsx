@@ -19,8 +19,8 @@ class GalleryDropzoneComponent extends Component{
         }
 
     
-    addImage(img, callback){
-      this.props.onAddImage(img,callback)
+    addImage(img, callbackSuccess,callbackError){
+      this.props.onAddImage(img, callbackSuccess,callbackError)
       const Completed = this.state.uploadComplete
       Completed.push(img)
       this.setState({

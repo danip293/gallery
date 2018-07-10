@@ -15,8 +15,8 @@ class GalleryAdminComponent extends Component {
     this.addImage = this.addImage.bind(this)
   }
 
-  addImage(img, callback){
-      this.props.addImg(img, callback)  
+  addImage(img, callbackSuccess,callbackError){
+      this.props.addImg(img, callbackSuccess,callbackError)  
   }
     render (){
      
@@ -33,7 +33,7 @@ class GalleryAdminComponent extends Component {
                 selectPage = {this.props.selectPage}
                 delete = {this.props.delete}
                 cover = {this.props.coverImage} 
-                multipleChoice = {false}
+                multipleChoice = {true}
                 pageSize = {this.props.images.pageSize}
             />
 
@@ -66,7 +66,7 @@ class GalleryAdminComponent extends Component {
           fetchData  : (Url) => dispatch(fetchData(Url)),
           delete     : (id) => dispatch(deleteImage(id)),
           selectPage : (page) => dispatch(selectPage(page)),
-          addImg     : (img, callback) => dispatch(uploadImage(img,callback)),
+          addImg     : (img,callbackSuccess,callbackError) => dispatch(uploadImage(img,callbackSuccess,callbackError)),
           coverImage : (id) => dispatch(coverImage(id))
         }
     }

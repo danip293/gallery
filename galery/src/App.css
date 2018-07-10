@@ -9,8 +9,8 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
-  padding: 20px;
+  height: 100px;
+  padding: 0px;
   color: white;
 }
 .Menu{
@@ -149,6 +149,7 @@
   background-color: red;
   
   margin:  1px solid;
+
   
 }
 
@@ -159,12 +160,21 @@
 /*--------------*/
 
 
+/*---------------*/
+
+
 
 
 
 
 .dropzone-content{
   width: 500px;
+
+
+}
+.dropzone{
+  height: 200px;
+  overflow: auto;
 
 }
 
@@ -174,7 +184,7 @@
   position: relative;
   display: inline-block;
   width: 30%;
-  height:30%;
+ 
  
   
 }
@@ -292,3 +302,4 @@
     opacity: 0.9;
   }
 }
+

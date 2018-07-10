@@ -1,11 +1,12 @@
+import './App.css';
+import './example.css'
+import './file-picker.css'
+import './gallery.css'
+
 import React ,{Component} from 'react';
 import PropTypes from 'prop-types'
 import Menus from './menu.js'
 import {Link} from 'react-router-dom'
-import './App.css';
-import './example.css'
-import '../node_modules/dropzone/dist/min/dropzone.min.css'
-import './file-picker.css'
 import logo from './logo.svg';
 import { Provider } from 'react-redux'; ///// conecta los containers al store de redux
 
@@ -42,7 +43,8 @@ class  App extends Component{
 				</div>
 			</Provider>
 		)
-}}
+	}
+}
 
 
 export default App;

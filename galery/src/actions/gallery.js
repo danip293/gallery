@@ -1,9 +1,10 @@
-		const token = "sAIOwXigJ4BITByLVIAwpIZSjwuUfh3t~1fOpK6~FTNUtEKNEV_FqNjWGTILye-fx2E"
-		const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
-		const identityID = "~FgT5c4D56wq"
-		const galeryID = "~FgT5c4D56wq"
-		const query  = "/?resizetofit.width=200&resizetofit.height=200&resizetofit.upscale=true&_format=jpeg&page_size=5"
-		const finalUrl = baseUrl+identityID + ":" + galeryID  +"/"
+
+const token = "sAkodTHOzAbaGTd3QMokHFSkiMOw8cwp~1fb740~MpIgOLAQxzk2Jy--CRmnVmCaMoU"
+const baseUrl = "https://galleries-sandbox-api.dubalu.io/"
+const identityID = "~FgT5c4D56wq"
+const galeryID = "~FgT5c4D56wq"
+const query  = "/?resizetofit.width=200&resizetofit.height=200&resizetofit.upscale=true&_format=jpeg&page_size=5"
+const finalUrl = baseUrl+identityID + ":" + galeryID  +"/"
 
 export const ADD_IMAGE = "ADD_IMAGE"
 export const DELETE_IMAGE = "DELETE_IMAGE"
@@ -51,8 +52,7 @@ export const selectedPage = (pageNumber) =>{
 export const selectPage = (pageNumber) =>{
 	return (dispatch , getState) =>{
 		let state = getState()
-		// let page_size = 5
-		// page_size = page_size % 20 
+		
 
 				
 		if (state.getImages.requestedPages.get("page"+ pageNumber) === undefined) { /// cuando no se tiene una pagina selecccionada
@@ -74,7 +74,7 @@ export const addImage = (img) =>{
 	}
 }
 
-export const uploadImage = (data , callback) => {
+export const uploadImage = (data , callbackSuccess,callbackError) => {
 	return(dispatch) =>{
 
 	let options = {
@@ -93,8 +93,8 @@ export const uploadImage = (data , callback) => {
 	      .then(response => {
 	        if (response.ok) {
 
-	        	if(callback){
-	        		callback()	
+	        	if(callbackSuccess){
+	        		callbackSuccess()	
 	        	}
 	          return response.json();
 	        } else {
@@ -105,6 +105,9 @@ export const uploadImage = (data , callback) => {
 	      		dispatch(addImage(data))
 	      	})
 	      .catch(error =>{
+	      		if(callbackError){
+	      			callbackError()
+	      		}
 		      	alert(error)
 		      	console.log(error)
 	      })
@@ -170,8 +173,7 @@ export const fetchData = (Url = finalUrl + query) =>{
 		        dispatch(getDataSuccess(j))
 		    })
 		    .catch( (err) =>{
-		    	alert(err)
-		        //console.log('ERROR:', err.message);
+		    	alert(err.message)
 		        dispatch(getDataFailure())
 		    });
 		
